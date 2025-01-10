@@ -1,7 +1,6 @@
 import pandas as pd
 
 from src.data_frames.build_df import BuildDF
-from src.utils.extract_data import obtem_colunas
 from src.utils.load_file import get_sheet_names
 
 
@@ -19,9 +18,6 @@ def executa_cruzamento(path_xlsx: str):
     navega em todas
     """
 
-    # coluna que representa a soma dos anos
-    soma_anos = 'TOTAL_ANOS'
-
     for sheet in sheet_names_xlsx:
         obj_df = BuildDF(
             xlsx_name=path_xlsx,
@@ -29,41 +25,36 @@ def executa_cruzamento(path_xlsx: str):
             skiprows=valid_data_row,
             chunk_size=chunk_size
         )
+
+        # gera o DF do arquivo
+        obj_df.build_data_frame()
+
         # carrega as variaveis do DF criado
         obj_df.get_variables()
 
         # obtem os nomes das variaveis (colunas) do DF
-        colunas_anos, lista_demais_colunas = obtem_colunas(obj_df.variables)
+        obj_df.define_columns()
 
         # Soma todos os anos em uma nova coluna 'TOTAL'
-        obj_df.df[soma_anos] = obj_df.df[colunas_anos].sum(axis=1)
+        obj_df.build_column_total_years()
 
-        # --- 1. Cruzamento SEXO x LOCAL ---
-        if (
-            "SEXO" in lista_demais_colunas and
-            "LOCAL" in lista_demais_colunas
-        ):
-            sexo_local = obj_df.df.groupby(["SEXO", "LOCAL"]).agg({soma_anos: "sum"}).reset_index()
-        else:
-            raise ValueError("As variaveis SEXO e LOCAL não existem no df criado!")
+        # Cruzamento SEXO x LOCAL
+        sexo_local = obj_df.cross_data(
+            first_var="SEXO",
+            second_var="LOCAL"
+        )
 
-        # --- 2. Cruzamento LOCAL x IDADE ---
-        if (
-            "IDADE" in lista_demais_colunas and
-            "LOCAL" in lista_demais_colunas
-        ):
-            local_idade = obj_df.df.groupby(["LOCAL", "IDADE"]).agg({soma_anos: "sum"}).reset_index()
-        else:
-            raise ValueError("As variaveis SEXO e LOCAL não existem no df criado!")
+        # Cruzamento LOCAL x IDADE
+        local_idade = obj_df.cross_data(
+            first_var="IDADE",
+            second_var="LOCAL"
+        )
 
-        # --- 3. Cruzamento SEXO x IDADE ---
-        if (
-            "SEXO" in lista_demais_colunas and
-            "IDADE" in lista_demais_colunas
-        ):
-            sexo_idade = obj_df.df.groupby(["SEXO", "IDADE"]).agg({soma_anos: "sum"}).reset_index()
-        else:
-            raise ValueError("As variaveis SEXO e LOCAL não existem no df criado!")
+        # Cruzamento SEXO x IDADE
+        sexo_idade = obj_df.cross_data(
+            first_var="SEXO",
+            second_var="IDADE"
+        )
 
         with pd.ExcelWriter("cross_analysis_results.xlsx") as writer:
             sexo_local.to_excel(writer, sheet_name="SEXO_x_LOCAL", index=False)

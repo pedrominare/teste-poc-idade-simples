@@ -1,16 +1,60 @@
 from src.utils.load_file import create_df_from_large_xlsx
+from src.utils.methods_helper import validar_dado_numerico_como_string
 
 
 class BuildDF:
     def __init__(self, xlsx_name, sheet_name, skiprows, chunk_size):
-        self.skiprows = skiprows
+        self.xlsx_name = xlsx_name
         self.sheet_name = sheet_name
-        self.df = create_df_from_large_xlsx(
-            file_name=xlsx_name,
-            start_row=skiprows,
-            chunk_size=chunk_size
-        )
+        self.skiprows = skiprows
+        self.chunk_size = chunk_size
+        self.df = None
         self.variables = None
+        self.years_columns_list = []
+        self.columns_not_years_list = []
+        self.column_total_years = 'TOTAL_ANOS'
 
     def get_variables(self):
         self.variables = self.df.columns.tolist()
+
+    def build_data_frame(self):
+        self.df = create_df_from_large_xlsx(
+            file_name=self.xlsx_name,
+            sheet_name=self.sheet_name,
+            start_row=self.skiprows,
+            chunk_size=self.chunk_size
+        )
+
+    def define_columns(self):
+        for coluna in self.variables:
+            # verifica se a variavel (coluna) eh ano ou nao
+            if validar_dado_numerico_como_string(str(coluna)):
+                self.years_columns_list.append(coluna)
+            else:
+                self.columns_not_years_list.append(coluna)
+
+    def build_column_total_years(self):
+        self.df[self.column_total_years] = self.df[self.years_columns_list].sum(axis=1)
+
+    def cross_data(self, first_var, second_var):
+        if (
+            first_var in self.columns_not_years_list and
+            second_var in self.columns_not_years_list
+        ):
+            try:
+                df_crossed = self.df.groupby(
+                    [
+                        first_var,
+                        second_var
+                    ]
+                ).agg(
+                    {
+                        self.column_total_years: "sum"
+                    }
+                ).reset_index()
+            except Exception as error:
+                raise Exception(f"Erro ao tentar cruzar dados de {first_var} e {second_var}! {error}")
+        else:
+            raise ValueError(f"As variaveis {first_var} e {second_var} não existem no df criado!")
+
+        return df_crossed
