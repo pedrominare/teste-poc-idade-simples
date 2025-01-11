@@ -1,5 +1,5 @@
-from src.utils.load_file import create_df_from_large_xlsx
-from src.utils.methods_helper import validar_dado_numerico_como_string
+from src.utils.df_helper import create_df_from_large_xlsx
+from src.utils.df_helper import validar_dado_numerico_como_string
 
 
 class BuildDF:
@@ -33,15 +33,22 @@ class BuildDF:
             else:
                 self.columns_not_years_list.append(coluna)
 
+    # cria a coluna da soma de todos os anos por observacao.
     def build_column_total_years(self):
+        # soma os valores de todos os anos disponiveis em cada observação.
         self.df[self.column_total_years] = self.df[self.years_columns_list].sum(axis=1)
 
+    # faz o cruzamento de DFs com base em 2 variaveis (colunas).
     def cross_data(self, first_var, second_var):
         if (
             first_var in self.columns_not_years_list and
             second_var in self.columns_not_years_list
         ):
             try:
+                """
+                Agrupa as observações do DF por first_var e second_var, 
+                soma os anos e armazena na coluna self.column_total_years.
+                """
                 df_crossed = self.df.groupby(
                     [
                         first_var,
@@ -52,6 +59,7 @@ class BuildDF:
                         self.column_total_years: "sum"
                     }
                 ).reset_index()
+
             except Exception as error:
                 raise Exception(f"Erro ao tentar cruzar dados de {first_var} e {second_var}! {error}")
         else:

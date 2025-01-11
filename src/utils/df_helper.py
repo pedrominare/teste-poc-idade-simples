@@ -1,5 +1,8 @@
 import pandas as pd
 import openpyxl
+import re
+
+import unicodedata
 
 
 def create_df_from_large_xlsx(file_name: str, sheet_name: str, start_row: int = 1, chunk_size: int = 1000):
@@ -59,3 +62,20 @@ def get_sheet_names(file_name):
         raise FileExistsError(f"Erro ao tentar carregar os nomes das planilhas do arquivo {file_name}! {error}")
 
     return sheet_names
+
+
+def validar_dado_numerico_como_string(string_data: str):
+    try:
+        if re.match(r'^\d{4}$', string_data) is not None:
+            return True
+        else:
+            return False
+    except Exception as error:
+        raise Exception(f"Erro no metodo validar_dado_numerico_como_string ao tentar validar o ano {string_data}! {error}")
+
+
+def normalizar_string(text):
+    try:
+        return ''.join(c for c in unicodedata.normalize('NFD', text) if unicodedata.category(c) != 'Mn').lower()
+    except Exception as error:
+        raise Exception(f"Erro ao normalizar a string {text}! {error}")
