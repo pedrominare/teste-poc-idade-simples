@@ -1,4 +1,5 @@
 import os.path
+from time import sleep
 
 from database.postgresql_connection import DbConnect
 from database.queries import query_sexo_local, query_idade_local, query_sexo_idade
@@ -47,9 +48,13 @@ try:
     obj_db = DbConnect()
 
     # limpa tabelas anteriores do banco com o mesmo nome
+    print("Limpando db anterior...")
     obj_db.run_sql_command(text("DROP TABLE IF EXISTS sexo_local, idade_local, sexo_idade CASCADE;"))
+    print("DB limpo!")
+    sleep(5)
 
     # criando as tabelas por meio de queries pré-definidas
+    print("Criando as tabelas para inserir os DFs...")
     obj_memory_usage.add_checkpoint(name="Creating tables in database")
     obj_db.run_sql_command(query_sexo_local)
     obj_db.run_sql_command(query_idade_local)
