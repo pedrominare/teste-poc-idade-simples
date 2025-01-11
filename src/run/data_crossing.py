@@ -1,5 +1,5 @@
-from src.data_frames.build_df import BuildDF
-from src.utils.df_helper import get_sheet_names
+from data_frames.build_df import BuildDF
+from utils.df_helper import get_sheet_names
 
 
 class DataCrossing:

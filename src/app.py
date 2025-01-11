@@ -1,19 +1,19 @@
 import os.path
 
-from src.database.postgresql_connection import DbConnect
-from src.database.queries import query_sexo_local, query_idade_local, query_sexo_idade
-from src.run.data_crossing import DataCrossing
+from database.postgresql_connection import DbConnect
+from database.queries import query_sexo_local, query_idade_local, query_sexo_idade
+from run.data_crossing import DataCrossing
 
 from sqlalchemy import text
 
-from src.run.trace_malloc import MemoryUse
+from run.trace_malloc import MemoryUse
 
 # cria objeto de monitoramento de consumo de memoria
 obj_memory_usage = MemoryUse()
 obj_memory_usage.add_checkpoint(name="Start to run")
 
 # caminho da fonte de dados
-path_xlsx = os.path.join(os.getcwd(), 'projecoes_2024_tab1_idade_simples.xls')
+path_xlsx = os.path.join(os.getcwd(), 'projecoes_2024_tab1_idade_simples.xlsx')
 
 # data_crossing(path_xlsx=path_xlsx)
 obj_memory_usage.add_checkpoint(name="Building DataFrame From xlsx file")

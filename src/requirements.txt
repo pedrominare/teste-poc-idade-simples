@@ -3,7 +3,7 @@ numpy
 openpyxl
 dask
 dask[dataframe]
-psycopg2
 sqlalchemy
 memory_profiler
+psycopg2
 fireducks

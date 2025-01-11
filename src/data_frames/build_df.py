@@ -1,5 +1,5 @@
-from src.utils.df_helper import create_df_from_large_xlsx
-from src.utils.df_helper import validar_dado_numerico_como_string
+from utils.df_helper import create_df_from_large_xlsx
+from utils.df_helper import validar_dado_numerico_como_string
 
 
 class BuildDF:
