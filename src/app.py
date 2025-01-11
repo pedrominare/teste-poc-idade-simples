@@ -1,3 +1,5 @@
+import os.path
+
 from src.database.postgresql_connection import DbConnect
 from src.database.queries import query_sexo_local, query_idade_local, query_sexo_idade
 from src.run.data_crossing import DataCrossing
@@ -11,7 +13,7 @@ obj_memory_usage = MemoryUse()
 obj_memory_usage.add_checkpoint(name="Start to run")
 
 # caminho da fonte de dados
-path_xlsx = 'B:\\Documentos\\TESTE-CONVESTE-FINAL\\projecoes_2024_tab1_idade_simples.xlsx'
+path_xlsx = os.path.join(os.getcwd(), 'projecoes_2024_tab1_idade_simples.xls')
 
 # data_crossing(path_xlsx=path_xlsx)
 obj_memory_usage.add_checkpoint(name="Building DataFrame From xlsx file")
