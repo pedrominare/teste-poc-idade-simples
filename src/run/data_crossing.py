@@ -25,7 +25,7 @@ class DataCrossing:
                 xlsx_name=self.path_xlsx,
                 sheet_name=sheet,
                 skiprows=self.valid_data_row,
-                chunk_size=self.chunk_size
+                chunk_size=self.chunk_size,
             )
 
             # gera o DF do arquivo
@@ -44,10 +44,7 @@ class DataCrossing:
 
     def run_crossing(self, first_var: str, second_var: str):
         for obj in self.obj_list:
-            df_cross_result = obj.cross_data(
-                first_var=first_var,
-                second_var=second_var
-            )
+            df_cross_result = obj.cross_data(first_var=first_var, second_var=second_var)
             # o nome de cada DF sera first_var_second_var
             description = {
                 f"{str(first_var).lower()}_{str(second_var).lower()}": df_cross_result

@@ -17,7 +17,7 @@ class MemoryUse:
             {
                 "Checkpoint": name,
                 "Current (MB)": current / 10**6,
-                "Peak (MB)": peak / 10**6
+                "Peak (MB)": peak / 10**6,
             }
         )
 

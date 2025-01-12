@@ -12,7 +12,7 @@ class BuildDF:
         self.variables = None
         self.years_columns_list = []
         self.columns_not_years_list = []
-        self.column_total_years = 'TOTAL_ANOS'
+        self.column_total_years = "TOTAL_ANOS"
 
     def get_variables(self):
         self.variables = self.df.columns.tolist()
@@ -22,7 +22,7 @@ class BuildDF:
             file_name=self.xlsx_name,
             sheet_name=self.sheet_name,
             start_row=self.skiprows,
-            chunk_size=self.chunk_size
+            chunk_size=self.chunk_size,
         )
 
     def define_columns(self):
@@ -41,28 +41,27 @@ class BuildDF:
     # faz o cruzamento de DFs com base em 2 variaveis (colunas).
     def cross_data(self, first_var, second_var):
         if (
-            first_var in self.columns_not_years_list and
-            second_var in self.columns_not_years_list
+            first_var in self.columns_not_years_list
+            and second_var in self.columns_not_years_list
         ):
             try:
                 """
-                Agrupa as observações do DF por first_var e second_var, 
+                Agrupa as observações do DF por first_var e second_var,
                 soma os anos e armazena na coluna self.column_total_years.
                 """
-                df_crossed = self.df.groupby(
-                    [
-                        first_var,
-                        second_var
-                    ]
-                ).agg(
-                    {
-                        self.column_total_years: "sum"
-                    }
-                ).reset_index()
+                df_crossed = (
+                    self.df.groupby([first_var, second_var])
+                    .agg({self.column_total_years: "sum"})
+                    .reset_index()
+                )
 
             except Exception as error:
-                raise Exception(f"Erro ao tentar cruzar dados de {first_var} e {second_var}! {error}")
+                raise Exception(
+                    f"Erro ao tentar cruzar dados de {first_var} e {second_var}! {error}"
+                )
         else:
-            raise ValueError(f"As variaveis {first_var} e {second_var} não existem no df criado!")
+            raise ValueError(
+                f"As variaveis {first_var} e {second_var} não existem no df criado!"
+            )
 
         return df_crossed
