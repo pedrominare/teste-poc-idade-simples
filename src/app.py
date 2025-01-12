@@ -47,6 +47,9 @@ try:
     obj_memory_usage.add_checkpoint(name="Connecting to database")
     obj_db = DbConnect()
 
+    # estabele a conexao com o db
+    obj_db.create_connection()
+
     # limpa tabelas anteriores do banco com o mesmo nome
     print("Limpando db anterior...")
     obj_db.run_sql_command(text("DROP TABLE IF EXISTS sexo_local, idade_local, sexo_idade CASCADE;"))

@@ -1,7 +1,11 @@
 import os
-import psycopg2
+from psycopg2 import OperationalError
 from sqlalchemy import create_engine
+from sqlalchemy import text
 from sqlalchemy.orm import sessionmaker
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 class DbConnect:
@@ -11,13 +15,22 @@ class DbConnect:
         self.db_user = os.getenv('DATABASE_USER')
         self.db_password = os.getenv('DATABASE_PASSWORD')
         self.db_name = os.getenv('DATABASE_NAME')
-        # self.cursor = None
-        # self.connection = None
-        self.engine = create_engine(
-            f'postgresql://{self.db_user}:{self.db_password}@{self.db_host}/{self.db_name}'
-        )
-        self.Session = sessionmaker(bind=self.engine)
-        self.session = self.Session()
+        self.engine = None
+        self.Session = None
+        self.session = None
+
+    def create_connection(self):
+        try:
+            self.engine = create_engine(
+                f'postgresql://{self.db_user}:{self.db_password}@{self.db_host}/{self.db_name}'
+            )
+            self.Session = sessionmaker(bind=self.engine)
+            self.session = self.Session()
+            self.session.execute(text("SELECT 1;"))
+            self.session.commit()
+            print("Conexao ao db estabelecida!")
+        except OperationalError as error:
+            raise OperationalError(f"Erro ao estabelecer a conexao com o db! {error}")
 
     def insert_df_database(self, df_object):
         try:
@@ -40,32 +53,3 @@ class DbConnect:
             self.session.commit()
         except Exception as error:
             raise Exception(f"Erro ao executar comando SQL! {error}")
-
-    """
-    def create_connection_psycopg2(self):
-        try:
-            self.connection = psycopg2.connect(
-                host=self.db_host,
-                port=self.db_port,
-                user=self.db_user,
-                password=self.db_password,
-                dbname=self.db_name
-            )
-            self.cursor = self.connection.cursor()
-
-        except Exception as error:
-            raise Exception(f"Erro ao conectar ou criar tabelas: {error}")
-
-    def run_sql_command_psycopg2(self, sql_command):
-        try:
-            self.cursor.execute(sql_command)
-            self.connection.commit()
-            print("Comando SQL executado!")
-        except Exception as error:
-            raise Exception(f"Erro ao executar comando SQL! {error}")
-        
-    def end_connection_psycopg2(self):
-        if self.connection:
-            self.cursor.close()
-            self.connection.close()
-    """

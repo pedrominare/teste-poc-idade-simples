@@ -12,13 +12,17 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: teste_conveste
     image: teste-conveste:1.0
     depends_on:
       - db
     env_file:
       - .env
+    working_dir: /app
+    command: python app.py
     volumes:
       - ./src:/app
 
