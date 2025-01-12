@@ -1,6 +1,12 @@
 # teste-poc-idade-simples
 - PoC em Python para cruzamento de dados de idade, sexo e ano
 
+# Como executar o codigo
+- Clone o repositorio.
+- Com o Docker instalado na máquina, execute:
+  - docker-compose build
+  - docker-compose up
+
 # Estrutura do código
 ## Objetivo
 - O código deve ler um arquivo xlsx e fazer um cruzamento entre:
@@ -37,18 +43,18 @@
 ### Cruzamento SEXO x IDADE
 - Significa que para cada sexo de indivído e idade há um total de casos somados entre os anos de 2000 e 2070.
 
-# Explicação
+# Contexto
 - O código usa a função groupby() do Pandas para agrupar as combinações
 - O código usa a função agg() para somar os valores de todos os anos de cada cruzamento.
 - O .reset_index() é usado para que a soma dos anos seja uma coluna normal e não um índice.
 
-# O Padrão de projetos foi inspirado no Facade
+## O Padrão de projetos foi inspirado no Facade
 - Ele é usado para fornecer uma interface simplificada para um sistema complexo, facilitando a interação com diversas classes e subsistemas internos.
 - A ideia foi criar uma camada de abstração que facilite a manutenção, dado que cada classe tem sua finalidade estabelecida.
 - Dividir as finalidades por classe permite uma manutenção mais direcionada, uma vez que se torna mais fácil identificar a causa do problema e corrigir diretamente na classe responsável.
 - Os objetos permitem encapsular os métodos de cada classe, simplificando a interface para o usuário final e organizando o código por etapas.
 
-# SOLID
+## SOLID
 - Single Responsibility Principle (SRP) – Princípio da Responsabilidade Única.
   - O SRP diz que uma classe deve ter uma única responsabilidade ou motivo para mudar.
   - Responsabilidades separadas em múltiplas classes:
@@ -67,7 +73,7 @@
   - Há um acoplamento forte entre o app.py e as implementações específicas de DbConnect e DataCrossing.
   - Poderia criar interfaces ou classes abstratas para definir os métodos de conexão ao DB e manipulação de dados.
 
-# Ponto desafiador
+## Ponto desafiador
 - Ler o arquivo xlsx e criar os DFs em chunks devido ao grande volume dados.
 - Utilizar somente o Pandas para obter os dados do arquivo não foi eficiente, o tempo de execução e consumo de memória eram muito grandes.
 - A abordagem utilizada foi ler o xlsx usando openpyxl.load_workbook, iterar linha por linha e criar o DF em chunks.
