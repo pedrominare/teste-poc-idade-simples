@@ -22,6 +22,7 @@ obj_data = DataCrossing(
     path_xlsx=path_xlsx
 )
 
+# esse metodo cria 1 objeto da classe BuildDF por planilha do arquivo xlsx.
 obj_data.build_df()
 obj_memory_usage.add_checkpoint(name="Crossing SEXO and LOCAL")
 # os nomes das tabelas estao nas chaves dos dicts -> nome_tabela: df
@@ -63,7 +64,7 @@ try:
     obj_db.run_sql_command(query_idade_local)
     obj_db.run_sql_command(query_sexo_idade)
 
-    # criar um laco para iterar sobe obj_data e obter os nomes das chaves e os dfs correspondentes.
+    # criar um laco para iterar sobe obj_data.df_cross_result e obter os nomes das chaves e os dfs correspondentes.
     for df_object in obj_data.df_cross_result:
         # o comando to_sql permite inserir os dados no banco direto do DF sem criar previamente as tabelas.
         obj_memory_usage.add_checkpoint(name=f"Saving {list(df_object)[0]} data to database.")
