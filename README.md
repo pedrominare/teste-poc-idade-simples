@@ -79,4 +79,4 @@
 - A abordagem utilizada foi ler o xlsx usando openpyxl.load_workbook, iterar linha por linha e criar o DF em chunks.
 - Cada chunk representava 1 linha, e chunk_size a quantidade de linhas de cada DF criado em cada iteração.
 
-![Workflow teste-conveste](https://github.com/pedrominare/teste-poc-idade-simples/issues/1#issue-2784346864)
+![Workflow teste-conveste](./assets/poc-python.png)
