@@ -3,7 +3,7 @@ import pandas as pd
 from pandas import DataFrame
 
 
-class MemoryUse:
+class MemoryMonitor:
     def __init__(self):
         tracemalloc.start()
         self.memory_usage = []

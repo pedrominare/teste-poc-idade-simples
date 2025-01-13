@@ -1,8 +1,5 @@
 pandas
-numpy
 openpyxl
-dask
-dask[dataframe]
 sqlalchemy
 memory_profiler
 psycopg2
