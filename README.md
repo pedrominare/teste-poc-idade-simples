@@ -1,5 +1,6 @@
 # teste-poc-idade-simples
-- PoC em Python para cruzamento de dados de idade, sexo e ano
+- PoC em Python para cruzamento de dados de idade, local, sexo e ano.
+- Ambiente Docker gravando dados em PostgreSQL
 
 # Como executar o codigo
 - Clone o repositorio.
