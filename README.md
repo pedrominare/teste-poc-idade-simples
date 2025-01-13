@@ -20,17 +20,16 @@
 - Os dados válidos para cruzamento começam a partir da linha 6 (cabecalho)
 
 ## Classes
-- A classe BuildDF reune os parâmetros necessários para criar o dataframe.
+- A classe BuildDf reune os parâmetros necessários para criar o dataframe.
 - O dataframe é criado em chunks para otimizar o desempenho.
 - A classe DbConnect reune os métodos para conexão ao db PostgreSQL
 - A classe DataCrossing cria os objetos da classe BuildDF e roda os cruzamentos de dados.
-- A classe MemoryUse possui os metodos para monitorar o consumo de memoria na execução do código.
+- A classe MemoryMonitor possui os metodos para monitorar o consumo de memoria na execução do código.
 
 ## Critérios
 - O arquivo é carregado utilizando o openpyxl.
-- Cada chunk corresponde a 1 dataframe.
+- Cada chunk_size corresponde ao tamanho da lista que constrói 1 dataframe.
 - A lista de dataframes criada é concatenada em 1 dataframe final.
-- O yield é um gerador que permite processar os chunks vez por vez na memória.
 
 ## Método
 - Os cruzamentos são agrupamentos com a soma do valor total de anos para cada combinação.
@@ -61,7 +60,7 @@
   - Responsabilidades separadas em múltiplas classes:
     - DbConnect para conexão ao db.
     - DataCrossing para cruzar dados dos DFs.
-    - MemoryUse para monitorar o uso de memória.
+    - MemoryMonitor para monitorar o uso de memória.
   - O código ficou mais modular e fácil de entender.
 - Open/Closed Principle (OCP) – Princípio Aberto/Fechado
   - Uma classe deve estar aberta para extend e fechada para modificação.
@@ -69,12 +68,13 @@
     - DbConnect pode ser extended para outros dbs (MySQL, etc), podendo ainda substituir uma superclasse sem quebrar código (Liskov Substitution Principle (LSP) – Princípio da Substituição de Liskov)
 - Interface Segregation Principle (ISP) – Princípio da Segregação de Interfaces
   - Uma classe não deve ser forçada a implementar métodos que não usa.
-    - MemoryUse tem a única responsabilidade de monitorar o uso de memória sem estar sobrecarregada.
+    - MemoryMonitor tem a única responsabilidade de monitorar o uso de memória sem estar sobrecarregada.
 
 ## Ponto desafiador
 - Ler o arquivo xlsx e criar os DFs em chunks devido ao grande volume dados.
-- Utilizar somente o Pandas para obter os dados do arquivo não foi eficiente, o tempo de execução e consumo de memória eram muito grandes.
+- Utilizar o Pandas da forma convencional para obter os dados do arquivo pode não ser a melhor solução.
 - A abordagem utilizada foi ler o xlsx usando openpyxl.load_workbook, iterar linha por linha e criar o DF em chunks.
-- Cada chunk representava 1000 linhas e chunk_size a quantidade de linhas de cada DF criado em cada iteração.
+- Cada chunk contém 500(chunk_size) linhas.
+- Cada DF criado em chunks possui 500 observações, que depois são concatenadas em 1 único DF final.
 
 ![Workflow teste-conveste](./assets/poc-python.png)
