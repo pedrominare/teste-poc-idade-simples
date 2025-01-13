@@ -70,9 +70,6 @@
 - Interface Segregation Principle (ISP) – Princípio da Segregação de Interfaces
   - Uma classe não deve ser forçada a implementar métodos que não usa.
     - MemoryUse tem a única responsabilidade de monitorar o uso de memória sem estar sobrecarregada.
-- Não aplicado: Dependency Inversion Principle (DIP) – Princípio da Inversão de Dependência
-  - Há um acoplamento forte entre o app.py e as implementações específicas de DbConnect e DataCrossing.
-  - Poderia criar interfaces ou classes abstratas para definir os métodos de conexão ao DB e manipulação de dados.
 
 ## Ponto desafiador
 - Ler o arquivo xlsx e criar os DFs em chunks devido ao grande volume dados.
