@@ -1,3 +1,5 @@
+import time
+
 import pandas as pd
 import openpyxl
 import re
@@ -6,17 +8,34 @@ import unicodedata
 
 
 def create_df_from_large_xlsx(
-    file_name: str, sheet_name: str, start_row: int = 1, chunk_size: int = 1000
+    file_name: str,
+    sheet_name: str,
+    start_row: int = 1,
+    chunk_size: int = 1000,
+    logging=None,
 ):
     # Para criar um único DataFrame com todos os chunks:
+    try:
+        inicio = time.time()
+        workbook = openpyxl.load_workbook(file_name, data_only=True, read_only=True)
+        worksheet = workbook.active if sheet_name == "" else workbook[sheet_name]
+        fim = time.time()
+        logging.info(f"Tempo de leitura do arquivo xlsx: {fim - inicio:.2f} segundos")
+    except Exception as error:
+        raise Exception(f"Erro ao tentar ler o arquivo {file_name}! {error}")
+
     all_data = []
+    inicio = time.time()
     for chunk in read_excel_in_chunks(
-        file_name=file_name,
-        sheet_name=sheet_name,
+        worksheet=worksheet,
         chunk_size=chunk_size,
         start_row=start_row,
     ):
         all_data.append(chunk)
+
+    fim = time.time()
+    logging.info(f"Tempo de criacao dos DFs: {fim - inicio:.2f} segundos")
+
     try:
         # une todos os dataframes da lista all_data
         df = pd.concat(all_data, ignore_index=True)
@@ -26,15 +45,7 @@ def create_df_from_large_xlsx(
     return df
 
 
-def read_excel_in_chunks(
-    file_name: str, sheet_name: str, chunk_size: int = 1000, start_row: int = 1
-):
-    try:
-        workbook = openpyxl.load_workbook(file_name, data_only=True)
-        worksheet = workbook[sheet_name]
-    except Exception as error:
-        raise Exception(f"Erro ao tentar ler o arquivo {file_name}! {error}")
-
+def read_excel_in_chunks(worksheet, chunk_size: int = 1000, start_row: int = 1):
     get_headers = None
 
     for i in range(start_row, worksheet.max_row, chunk_size):
