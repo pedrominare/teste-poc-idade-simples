@@ -78,6 +78,6 @@
 - Ler o arquivo xlsx e criar os DFs em chunks devido ao grande volume dados.
 - Utilizar somente o Pandas para obter os dados do arquivo não foi eficiente, o tempo de execução e consumo de memória eram muito grandes.
 - A abordagem utilizada foi ler o xlsx usando openpyxl.load_workbook, iterar linha por linha e criar o DF em chunks.
-- Cada chunk representava 1 linha, e chunk_size a quantidade de linhas de cada DF criado em cada iteração.
+- Cada chunk representava 1000 linhas e chunk_size a quantidade de linhas de cada DF criado em cada iteração.
 
 ![Workflow teste-conveste](./assets/poc-python.png)
