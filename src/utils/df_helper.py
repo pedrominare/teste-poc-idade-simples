@@ -24,51 +24,53 @@ def create_df_from_large_xlsx(
     except Exception as error:
         raise Exception(f"Erro ao tentar ler o arquivo {file_name}! {error}")
 
-    all_data = []
     inicio = time.time()
-    for chunk in read_excel_in_chunks(
-        worksheet=worksheet,
-        chunk_size=chunk_size,
-        start_row=start_row,
-    ):
-        all_data.append(chunk)
+    try:
+        df = read_excel_in_chunks(
+            worksheet=worksheet,
+            chunk_size=chunk_size,
+            start_row=start_row,
+        )
+    except Exception as error:
+        raise Exception(f"Erro ao tentar concatenar os DFs! {error}")
 
     fim = time.time()
     logging.info(f"Tempo de criacao dos DFs: {fim - inicio:.2f} segundos")
-
-    try:
-        # une todos os dataframes da lista all_data
-        df = pd.concat(all_data, ignore_index=True)
-    except Exception as error:
-        raise Exception(f"Erro ao tentar concatenar os DFs! {error}")
 
     return df
 
 
 def read_excel_in_chunks(worksheet, chunk_size: int = 1000, start_row: int = 1):
     get_headers = None
+    try:
+        lista_linhas_worksheet = []
+        df_list = []
+        for row in worksheet.iter_rows(
+            values_only=True, min_row=start_row, max_row=worksheet.max_row
+        ):
+            lista_linhas_worksheet.append(row)
 
-    for i in range(start_row, worksheet.max_row, chunk_size):
-        # Itera sobre as linhas da planilha, especificando o intervalo de linhas para cada chunk.
-        rows = worksheet.iter_rows(
-            min_row=i, max_row=min(i + chunk_size, worksheet.max_row)
-        )
+            if len(lista_linhas_worksheet) >= chunk_size:
+                if get_headers is None:
+                    get_headers = lista_linhas_worksheet[0]
+                    df = pd.DataFrame(lista_linhas_worksheet[1:], columns=get_headers)
+                else:
+                    df = pd.DataFrame(lista_linhas_worksheet, columns=get_headers)
 
-        # Cria uma lista de listas, onde cada lista interna representa uma linha do chunk.
-        data = [[cell.value for cell in row] for row in rows]
+                df_list.append(df)
+                lista_linhas_worksheet.clear()
+                del df
 
-        if not get_headers:
-            get_headers = data[0]
-            data.pop(0)  # exclui o cabecalho do dataframe somente na primeira iteracao
+        if len(lista_linhas_worksheet) > 0:
+            df = pd.DataFrame(lista_linhas_worksheet, columns=get_headers)
+            df_list.append(df)
+            del df
 
-        df_chunk = pd.DataFrame(data, columns=get_headers)
-        """
-        Retorna um gerador, permitindo processar os chunks de forma eficiente.
-        Geradores permitem processar grandes quantidades de dados sem carregá-los todos de uma vez na memória.
-        A palavra-chave yield transforma a função em um gerador.
-        Em cada iteração do loop, quando yield data é encontrado, o valor de data é retornado para o chamador da função.
-        """
-        yield df_chunk
+        df_concatenado = pd.concat(df_list, ignore_index=True)
+    except Exception as error:
+        raise Exception(f"Erro ao criar os DFs em chunks: {error}")
+
+    return df_concatenado
 
 
 def get_sheet_names(file_name):

@@ -89,6 +89,7 @@ class DataCrossing(BuildDf):
 
             # gera o DF do arquivo
             obj_df.build_data_frame()
+            self.memory_usage.add_checkpoint(name=f"DFs de {sheet} construidos")
 
             # carrega as variaveis do DF criado
             obj_df.get_variables()
