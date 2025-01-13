@@ -1,13 +1,13 @@
-from utils.df_helper import create_df_from_large_xlsx
+from utils.df_helper import create_df_from_large_xlsx, get_sheet_names
 from utils.df_helper import validar_dado_numerico_como_string
 
 
 class BuildDF:
-    def __init__(self, xlsx_name, sheet_name, skiprows, chunk_size):
+    def __init__(self, xlsx_name, sheet_name):
         self.xlsx_name = xlsx_name
         self.sheet_name = sheet_name
-        self.skiprows = skiprows
-        self.chunk_size = chunk_size
+        self.skiprows = 6  # primeira linha com dados relevantes do arquivo xlsx
+        self.chunk_size = 1000  # quantidade de linhas por chunk a serem gravadas no DF.
         self.df = None
         self.variables = None
         self.years_columns_list = []

@@ -5,8 +5,6 @@ from utils.df_helper import get_sheet_names
 class DataCrossing:
     def __init__(self, path_xlsx):
         self.path_xlsx = path_xlsx
-        self.valid_data_row = 6
-        self.chunk_size = 1000
         self.obj_list = []
         self.df_cross_result = []
 
@@ -24,8 +22,6 @@ class DataCrossing:
             obj_df = BuildDF(
                 xlsx_name=self.path_xlsx,
                 sheet_name=sheet,
-                skiprows=self.valid_data_row,
-                chunk_size=self.chunk_size,
             )
 
             # gera o DF do arquivo
