@@ -16,7 +16,7 @@
 
 ## Arquivo
 - O arquivo é uma planilha no formato xlsx.
-- Os dados válidos para cruzamento começam a partir da linha 5 (cabecalho)
+- Os dados válidos para cruzamento começam a partir da linha 6 (cabecalho)
 
 ## Classes
 - A classe BuildDF reune os parâmetros necessários para criar o dataframe.
@@ -78,3 +78,5 @@
 - Utilizar somente o Pandas para obter os dados do arquivo não foi eficiente, o tempo de execução e consumo de memória eram muito grandes.
 - A abordagem utilizada foi ler o xlsx usando openpyxl.load_workbook, iterar linha por linha e criar o DF em chunks.
 - Cada chunk representava 1 linha, e chunk_size a quantidade de linhas de cada DF criado em cada iteração.
+
+![Workflow teste-conveste](https://github.com/pedrominare/teste-poc-idade-simples/issues/1#issue-2784346864)
