@@ -7,7 +7,7 @@ class BuildDf:
         self.xlsx_name = xlsx_name
         self.sheet_name = sheet_name
         self.skiprows = 6  # primeira linha com dados relevantes do arquivo xlsx
-        self.chunk_size = 500  # quantidade de linhas por chunk a serem gravadas no DF.
+        self.chunk_size = 500  # quantidade de linhas a serem gravadas por DF.
         self.df = None
         self.variables = None
         self.years_columns_list = []
@@ -29,7 +29,7 @@ class BuildDf:
 
     def define_columns(self):
         for coluna in self.variables:
-            # verifica se a variavel (coluna) eh ano ou nao
+            # verifica se a variavel (coluna) é ano ou nao
             if validar_dado_numerico_como_string(str(coluna)):
                 self.years_columns_list.append(coluna)
             else:
@@ -56,7 +56,6 @@ class BuildDf:
                     .agg({self.column_total_years: "sum"})
                     .reset_index()
                 )
-
             except Exception as error:
                 raise Exception(
                     f"Erro ao tentar cruzar dados de {first_var} e {second_var}! {error}"

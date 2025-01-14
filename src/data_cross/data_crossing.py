@@ -2,7 +2,7 @@ from data_frames.build_df import BuildDf
 from database.postgresql_connection import DbConnect
 from utils.df_helper import get_sheet_names
 from sqlalchemy import text
-from database.queries import query_sexo_local, query_idade_local, query_sexo_idade
+from database.queries import query_sexo_local, query_local_idade, query_sexo_idade
 
 
 class DataCrossing(BuildDf):
@@ -26,9 +26,9 @@ class DataCrossing(BuildDf):
         self.memory_usage.add_checkpoint(name="Executando cruzamento de SEXO e LOCAL")
         self.run_crossing(first_var="SEXO", second_var="LOCAL")
 
-        self.logging.info("Executando cruzamento de IDADE e LOCAL...")
-        self.memory_usage.add_checkpoint(name="Executando cruzamento de IDADE e LOCAL")
-        self.run_crossing(first_var="IDADE", second_var="LOCAL")
+        self.logging.info("Executando cruzamento de LOCAL e IDADE...")
+        self.memory_usage.add_checkpoint(name="Executando cruzamento de LOCAL e IDADE")
+        self.run_crossing(first_var="LOCAL", second_var="IDADE")
 
         self.logging.info("Executando cruzamento de SEXO e IDADE...")
         self.memory_usage.add_checkpoint(name="Executando cruzamento de SEXO e IDADE")
@@ -47,7 +47,7 @@ class DataCrossing(BuildDf):
             self.memory_usage.add_checkpoint(name="Limpando db anterior")
             obj_db.run_sql_command(
                 text(
-                    "DROP TABLE IF EXISTS sexo_local, idade_local, sexo_idade CASCADE;"
+                    "DROP TABLE IF EXISTS sexo_local, local_idade, sexo_idade CASCADE;"
                 )
             )
             self.logging.info("DB limpo!")
@@ -56,7 +56,7 @@ class DataCrossing(BuildDf):
             self.logging.info("Criando tabelas e inserindo dados...")
             self.memory_usage.add_checkpoint(name="Criando tabelas e inserindo dados")
             obj_db.run_sql_command(query_sexo_local)
-            obj_db.run_sql_command(query_idade_local)
+            obj_db.run_sql_command(query_local_idade)
             obj_db.run_sql_command(query_sexo_idade)
 
             for df_object in self.df_cross_result:

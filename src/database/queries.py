@@ -11,12 +11,12 @@ CREATE TABLE IF NOT EXISTS sexo_local (
 """
 )
 
-query_idade_local = text(
+query_local_idade = text(
     """
-CREATE TABLE IF NOT EXISTS idade_local (
+CREATE TABLE IF NOT EXISTS local_idade (
     "ID" SERIAL PRIMARY KEY,
-    "IDADE" INTEGER NOT NULL,
     "LOCAL" VARCHAR(100) NOT NULL,
+    "IDADE" INTEGER NOT NULL,
     "TOTAL_ANOS" BIGINT NOT NULL
 );
 """

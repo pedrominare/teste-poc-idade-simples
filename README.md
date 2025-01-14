@@ -35,16 +35,16 @@
 - Os cruzamentos são agrupamentos com a soma do valor total de anos para cada combinação.
 
 ### Cruzamento SEXO x LOCAL
-- Significa que para cada sexo e local há um total de casos somados entre os anos 2000 e 2070.
+- Significa que para cada observação combinando sexo e local há um total de casos somados entre os anos 2000 e 2070.
 
 ### Cruzamento LOCAL x IDADE
-- Significa que para cada individuo com certa idade em um local há um total de casos somados entre os anos 2000 e 2070.
+- Significa que para cada observação com certa idade por local há um total de casos somados entre os anos 2000 e 2070.
 
 ### Cruzamento SEXO x IDADE
-- Significa que para cada sexo de indivído e idade há um total de casos somados entre os anos de 2000 e 2070.
+- Significa que para cada observação combinando sexo e idade há um total de casos somados entre os anos de 2000 e 2070.
 
 # Contexto
-- O código usa a função groupby() do Pandas para agrupar as combinações
+- O código usa a função groupby() do Pandas para agrupar as variáveis.
 - O código usa a função agg() para somar os valores de todos os anos de cada cruzamento.
 - O .reset_index() é usado para que a soma dos anos seja uma coluna normal e não um índice.
 
@@ -64,14 +64,15 @@
   - O código ficou mais modular e fácil de entender.
 - Open/Closed Principle (OCP) – Princípio Aberto/Fechado
   - Uma classe deve estar aberta para extend e fechada para modificação.
-    - DataCrossing pode ser extended.
+    - BuildDf pode ser extended.
+    - DataCrossing extende BuildDf pois compartilham atributos.
     - DbConnect pode ser extended para outros dbs (MySQL, etc), podendo ainda substituir uma superclasse sem quebrar código (Liskov Substitution Principle (LSP) – Princípio da Substituição de Liskov)
 - Interface Segregation Principle (ISP) – Princípio da Segregação de Interfaces
   - Uma classe não deve ser forçada a implementar métodos que não usa.
     - MemoryMonitor tem a única responsabilidade de monitorar o uso de memória sem estar sobrecarregada.
 
 ## Ponto desafiador
-- Ler o arquivo xlsx e criar os DFs em chunks devido ao grande volume dados.
+- Ler o arquivo xlsx e criar os DFs em chunks devido ao volume dados.
 - Utilizar o Pandas da forma convencional para obter os dados do arquivo pode não ser a melhor solução.
 - A abordagem utilizada foi ler o xlsx usando openpyxl.load_workbook, iterar linha por linha e criar o DF em chunks.
 - Cada chunk contém 500(chunk_size) linhas.

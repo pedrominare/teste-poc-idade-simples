@@ -14,7 +14,6 @@ def create_df_from_large_xlsx(
     chunk_size: int = 1000,
     logging=None,
 ):
-    # Para criar um único DataFrame com todos os chunks:
     try:
         inicio = time.time()
         workbook = openpyxl.load_workbook(file_name, data_only=True, read_only=True)
@@ -50,6 +49,7 @@ def read_excel_in_chunks(worksheet, chunk_size: int = 1000, start_row: int = 1):
         ):
             lista_linhas_worksheet.append(row)
 
+            # Cada DF criado possui chunk_size observações.
             if len(lista_linhas_worksheet) >= chunk_size:
                 if get_headers is None:
                     get_headers = lista_linhas_worksheet[0]
