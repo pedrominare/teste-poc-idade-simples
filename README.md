@@ -92,4 +92,4 @@
 - Cada chunk contém 500(chunk_size) linhas.
 - Cada DF criado em chunks possui 500 observações, que depois são concatenadas em 1 único DF final.
 
-![Workflow teste-conveste](./assets/poc-python.png)
+![Workflow teste-conveste](./assets/poc_python.png)
